@@ -82,7 +82,7 @@ public class Initializer implements CommandLineRunner {
         UserDetails userDetails = new UserDetails();
         userDetails.setFirstName("Bassam");
         userDetails.setLastName("Alamhdy");
-        userDetails.setEmail("bassam.mahdy@flairstech.com");
+        userDetails.setEmail("islamhaker@gmail.com");
         userDetails.setMobile("+20123456789");
         userDetails.setHourlyRate("20");
         userDetailsDao.save(userDetails);
