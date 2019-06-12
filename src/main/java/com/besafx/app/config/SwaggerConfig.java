@@ -41,16 +41,16 @@ public class SwaggerConfig implements WebMvcConfigurer {
     @Bean
     public Docket swaggerSpringfoxDocket() {
         Contact contact = new Contact(
-                "FlairsTech © 2018",
-                "https://flairstech.com",
-                "bassam.mahdy@flairstech.com");
+                "EasySoft © 2018",
+                "https://easysoft.com",
+                "islamhaker@gmail.com");
 
         List<VendorExtension> vext = new ArrayList<>();
         ApiInfo apiInfo = new ApiInfoBuilder()
-                .title("Code Checker Backend API")
-                .description("<p style=\"color: #89BF04\">Project Manager: Eman Khairy</p><p style=\"color: #89BF04\">Developer: Bassam Almahdy</p>")
+                .title("Food Book Backend API")
+                .description("<p style=\"color: #89BF04\">Project Manager: Bassam Almahdy</p><p style=\"color: #89BF04\">Developer: Bassam Almahdy</p>")
                 .version("1.0.0")
-                .termsOfServiceUrl("https://flairstech.com")
+                .termsOfServiceUrl("https://easysoft.com")
                 .license("Apache License Version 2.0")
                 .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0")
                 .contact(contact)
@@ -101,10 +101,8 @@ public class SwaggerConfig implements WebMvcConfigurer {
 //                .globalResponseMessage(RequestMethod.PATCH, globalResponses)
                 .tags(
                         new Tag("Authorization (Using JSON Web Token)", "", 1),
-                        new Tag("JIRA Integration", "", 2),
-                        new Tag("Sonar Cube Integration", "<p style=\"color: #e53935; font-weight:bold\">Under Construction</p>", 3),
                         new Tag("Rest API - Users", "<p style=\"color: #e53935; font-weight:bold\">Under Construction</p>", 4),
-                        new Tag("Rest API - Projects", "<p style=\"color: #e53935; font-weight:bold\">Under Construction</p>", 5)
+                        new Tag("Rest API - Products", "<p style=\"color: #e53935; font-weight:bold\">Under Construction</p>", 5)
                 );
 
         docket = docket

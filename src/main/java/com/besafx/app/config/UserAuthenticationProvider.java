@@ -1,7 +1,8 @@
 package com.besafx.app.config;
 
-import com.besafx.app.model.User;
-import com.besafx.app.dao.UserDao;
+import com.besafx.app.auditing.PersonAwareUserDetails;
+import com.besafx.app.dao.PersonDao;
+import com.besafx.app.model.Person;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +12,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Component
 public class UserAuthenticationProvider implements UserDetailsService {
@@ -23,7 +25,7 @@ public class UserAuthenticationProvider implements UserDetailsService {
     private final Logger LOG = LoggerFactory.getLogger(UserAuthenticationProvider.class);
 
     @Autowired
-    private UserDao userDao;
+    private PersonDao personDao;
 
     public UserAuthenticationProvider() {
         super();
@@ -31,19 +33,25 @@ public class UserAuthenticationProvider implements UserDetailsService {
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userDao
-                .findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with -> username or email : " + username));
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Person person = personDao
+                .findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with -> email : " + email));
 
         List<GrantedAuthority> authorities = new ArrayList<>();
-        user.getRoles()
-                .stream()
-                .flatMap(userRole -> userRole.getRole().getPrivileges().stream())
-                .map(rolePrivilege -> rolePrivilege.getPrivilege().getName())
-                .collect(Collectors.toList())
-                .forEach(s -> authorities.add(new SimpleGrantedAuthority(s)));
 
-        return new UserAwareUserDetails(user, authorities);
+        LOG.info("BUILD USER AUTHORITIES.");
+        Optional.ofNullable(person.getTeam().getAuthorities())
+                .ifPresent(value -> Arrays.asList(value.split(",")).stream()
+                        .forEach(s -> authorities.add(new SimpleGrantedAuthority(s))));
+
+        LOG.info("SAVE LOGIN INFO.");
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        person.setLastLoginDate(new Date());
+        person.setActive(true);
+        person.setIpAddress(request.getRemoteAddr());
+        personDao.save(person);
+
+        return new PersonAwareUserDetails(person, authorities);
     }
 }

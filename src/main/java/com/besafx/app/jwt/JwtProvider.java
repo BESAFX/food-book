@@ -1,6 +1,6 @@
 package com.besafx.app.jwt;
 
-import com.besafx.app.config.UserAwareUserDetails;
+import com.besafx.app.auditing.PersonAwareUserDetails;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +23,7 @@ public class JwtProvider {
 
     public String generateJwtToken(Authentication authentication) {
 
-        UserAwareUserDetails userPrincipal = (UserAwareUserDetails) authentication.getPrincipal();
+        PersonAwareUserDetails userPrincipal = (PersonAwareUserDetails) authentication.getPrincipal();
 
         return Jwts.builder()
                 .setSubject((userPrincipal.getUsername()))

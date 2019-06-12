@@ -1,7 +1,7 @@
-package com.besafx.app.config;
+package com.besafx.app.auditing;
 
 
-import com.besafx.app.model.User;
+import com.besafx.app.model.Person;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,19 +9,19 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class UserAwareUserDetails implements UserDetails {
+public class PersonAwareUserDetails implements UserDetails {
 
     @Getter
-    private final User user;
+    private final Person person;
 
     private final Collection<? extends GrantedAuthority> grantedAuthorities;
 
-    public UserAwareUserDetails(User user) {
-        this(user, new ArrayList<>());
+    public PersonAwareUserDetails(Person person) {
+        this(person, new ArrayList<>());
     }
 
-    public UserAwareUserDetails(User user, Collection<? extends GrantedAuthority> grantedAuthorities) {
-        this.user = user;
+    public PersonAwareUserDetails(Person person, Collection<? extends GrantedAuthority> grantedAuthorities) {
+        this.person = person;
         this.grantedAuthorities = grantedAuthorities;
     }
 
@@ -32,12 +32,12 @@ public class UserAwareUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return this.user.getPassword();
+        return this.person.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return this.user.getUsername();
+        return this.person.getEmail();
     }
 
     @Override
@@ -57,6 +57,6 @@ public class UserAwareUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.person.getEnabled();
     }
 }

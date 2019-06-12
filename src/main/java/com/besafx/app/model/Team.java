@@ -3,53 +3,51 @@ package com.besafx.app.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
-@Table(name = "\"role_privilege\"")
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class RolePrivilege implements Serializable {
+public class Team implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @GenericGenerator(
-            name = "rolePrivilegeRoleSequenceGenerator",
+            name = "teamSequenceGenerator",
             strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
             parameters = {
-                    @org.hibernate.annotations.Parameter(name = "sequence_name", value = "ROLE_PRIVILEGE_SEQUENCE"),
+                    @org.hibernate.annotations.Parameter(name = "sequence_name", value = "TEAM_SEQUENCE"),
                     @org.hibernate.annotations.Parameter(name = "initial_value", value = "1"),
                     @org.hibernate.annotations.Parameter(name = "increment_size", value = "1")
             }
     )
     @Id
-    @GeneratedValue(generator = "rolePrivilegeRoleSequenceGenerator")
+    @GeneratedValue(generator = "teamSequenceGenerator")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "\"role\"")
-    private Role role;
+    private Integer code;
 
-    @ManyToOne
-    @JoinColumn(name = "\"privilege\"")
-    private Privilege privilege;
+    private String name;
 
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
+    private String authorities;
+
+    @OneToMany(mappedBy = "team")
+    private List<Person> persons = new ArrayList<>();
 
     @JsonCreator
-    public static RolePrivilege Create(String jsonString) throws IOException {
+    public static Team Create(String jsonString) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        RolePrivilege rolePrivilege = mapper.readValue(jsonString, RolePrivilege.class);
-        return rolePrivilege;
+        Team team = mapper.readValue(jsonString, Team.class);
+        return team;
     }
 }
