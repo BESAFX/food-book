@@ -1,0 +1,52 @@
+version: "3.7"
+services:
+  sonarqube:
+    container_name: food-book/sonar:latest
+    image: sonarqube
+    ports:
+      - "9000:9000"
+    networks:
+      - net
+    depends_on:
+      - db
+    links:
+      - db
+    environment:
+      - sonar.jdbc.url=jdbc:postgresql://db:5432/sonar
+      - sonar.jdbc.username=postgres
+      - sonar.jdbc.password=root
+    volumes:
+      - sonarqube_conf:/opt/sonarqube/conf
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+  api: 
+    container_name: api
+    build: .
+    image: food-book/api:latest
+    networks: 
+      - net
+    depends_on: 
+      - db
+    links:
+      - db
+    ports: 
+      - "6030:6030"
+  db: 
+    container_name: db
+    build: database/
+    image: food-book/db:latest
+    networks: 
+      - net
+    ports: 
+      - "5040:5432"
+    volumes: 
+      - "database:/var/lib/postgresql/data"
+networks:
+  net: 
+    name: net
+    driver: bridge
+volumes: 
+  database: {}
+  sonarqube_conf:
+  sonarqube_data:
+  sonarqube_extensions:
