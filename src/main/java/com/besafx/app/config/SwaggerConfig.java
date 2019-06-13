@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -94,15 +95,16 @@ public class SwaggerConfig implements WebMvcConfigurer {
                 .securityContexts(Lists.newArrayList(securityContext()))
                 .securitySchemes(Lists.newArrayList(apiKey()))
                 .useDefaultResponseMessages(false)
-//                .globalResponseMessage(RequestMethod.GET, globalResponses)
-//                .globalResponseMessage(RequestMethod.PUT, globalResponses)
-//                .globalResponseMessage(RequestMethod.POST, globalResponses)
-//                .globalResponseMessage(RequestMethod.DELETE, globalResponses)
-//                .globalResponseMessage(RequestMethod.PATCH, globalResponses)
+                .globalResponseMessage(RequestMethod.GET, globalResponses)
+                .globalResponseMessage(RequestMethod.PUT, globalResponses)
+                .globalResponseMessage(RequestMethod.POST, globalResponses)
+                .globalResponseMessage(RequestMethod.DELETE, globalResponses)
+                .globalResponseMessage(RequestMethod.PATCH, globalResponses)
                 .tags(
-                        new Tag("Authorization (Using JSON Web Token)", "", 1),
-                        new Tag("Rest API - Users", "<p style=\"color: #e53935; font-weight:bold\">Under Construction</p>", 4),
-                        new Tag("Rest API - Products", "<p style=\"color: #e53935; font-weight:bold\">Under Construction</p>", 5)
+                        new Tag("Authorization", "", 1),
+                        new Tag("Company", "", 2),
+                        new Tag("Person", "", 3),
+                        new Tag("Customer", "", 4)
                 );
 
         docket = docket

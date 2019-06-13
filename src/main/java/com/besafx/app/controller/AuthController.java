@@ -3,6 +3,7 @@ package com.besafx.app.controller;
 import com.besafx.app.dto.JwtResponse;
 import com.besafx.app.dto.LoginForm;
 import com.besafx.app.jwt.JwtProvider;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,6 +17,7 @@ import javax.validation.Valid;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping(value = "/api/auth")
+@Api(value = "/api/auth", tags = {"Authorization"})
 public class AuthController {
 
     @Autowired
