@@ -24,7 +24,7 @@ public class AuthController {
     @Autowired
     JwtProvider jwtProvider;
 
-    @PostMapping("/signIn")
+    @PostMapping("/login")
     @ResponseBody
     public JwtResponse signIn(@Valid @RequestBody LoginForm loginRequest) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
