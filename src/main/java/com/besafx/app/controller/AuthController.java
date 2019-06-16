@@ -26,7 +26,7 @@ public class AuthController {
 
     @PostMapping("/login")
     @ResponseBody
-    public JwtResponse signIn(@Valid @RequestBody LoginForm loginRequest) {
+    public JwtResponse login(@Valid @RequestBody LoginForm loginRequest) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
